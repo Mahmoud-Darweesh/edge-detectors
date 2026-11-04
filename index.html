@@ -86,6 +86,8 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
 .kpi .what { font-weight: 600; font-size: 14px; margin-top: 5px }
 .kpi .vs { font-size: 12.5px; color: #A0ACB1; margin-top: 2px }
 .kpi.hl .vs { color: #D9E7F8 }
+.score .kpis { margin-bottom: 8px }
+.diag { margin: 0 0 12px }
 .caveat { background: var(--s2); border-left: 4px solid var(--bad); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 6px }
 .caveat .t { font-family: var(--disp); font-weight: 600; font-size: 18px; color: var(--bad); margin-bottom: 3px }
 .caveat p { font-size: 14.5px; margin: 0 }
@@ -140,7 +142,13 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
 .st.bad { color: #FF7A6B }
 .blind { font-size: 12px; color: #8A979F }
 .blind b { color: #fff; font-weight: 600 }
-.scr canvas { width: 100%; height: 12px; display: block; margin-top: 7px; border-radius: 2px }
+.tl { display: grid; grid-template-columns: 74px 1fr; gap: 6px; margin-top: 10px }
+.tll { position: relative; height: 132px; font-size: 11.5px; color: #A0ACB1 }
+.tll span { position: absolute; right: 0; white-space: nowrap }
+.tll span:nth-child(1) { top: 8px } .tll span:nth-child(2) { top: 35px } .tll span:nth-child(3) { top: 53px }
+.tll span:nth-child(4) { top: 71px } .tll span:nth-child(5) { top: 93px } .tll span:nth-child(6) { top: 115px }
+#tl { width: 100%; height: 132px; display: block; border-radius: 4px; touch-action: none; cursor: ew-resize }
+.tlx { display: flex; justify-content: space-between; font-size: 11.5px; color: #6B7A83; margin: 3px 0 0 80px }
 .ctl { display: flex; gap: 6px; align-items: center; margin-top: 11px }
 .ctl button, .chap button { font: inherit; font-weight: 500; font-size: 13.5px; background: #2A3439; color: #fff; border: 0; border-radius: 6px; padding: 7px 10px; cursor: pointer }
 #play { background: var(--ours); min-width: 64px; font-weight: 600 }
@@ -161,12 +169,21 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
   </div>
 </header>
 <nav class="jump"><div class="wrap">
-  <a href="#replay">Replay</a><a href="#s3">Solution</a><a href="#s4">Result</a><a href="#s5">How it works</a><a href="#s7">Rover</a><a href="#s8">Limits</a>
+  <a href="#s4">Result</a><a href="#replay">Replay</a><a href="#s3">Solution</a><a href="#s5">How it works</a><a href="#s7">Rover</a><a href="#s8">Limits</a>
 </div></nav>
 
 <main class="wrap">
 
-<div class="note"><b>Simulation results: a comparison, not a forecast.</b> Every controller drove the same simulated links. <a href="#s4">What that means</a></div>
+<section id="s4" class="score">
+  <div class="kpis">
+    <div class="kpi"><div class="big">85%</div><div class="what">usable operator view</div><div class="vs">baseline 76%</div></div>
+    <div class="kpi"><div class="big">−43%</div><div class="what">view interruptions</div><div class="vs">73 → 41 per mission</div></div>
+    <div class="kpi"><div class="big">−181 m</div><div class="what">driven without a usable view</div><div class="vs">767 m → 587 m</div></div>
+    <div class="kpi hl"><div class="big">9 → 96%</div><div class="what">usable view in the crater</div><div class="vs">reversing out on 1 Mbps</div></div>
+  </div>
+  <div class="caveat"><div class="t">A comparison, not a forecast</div>
+    <p>Simulation, standard mission, 5 seeds, ours against threshold failover. Every controller drove the same simulated links, so the gap is fair. The links are our assumptions (only 4G was measured), the route is one route, and 5 seeds is a small sample: a real THeMIS would not see these exact percentages. Across three scenarios, usable view was higher in 15 of 15 paired runs and interruptions lower in 14 of 15.</p></div>
+</section>
 
 <section id="replay" class="panel">
   <div class="step"><h2>Watch one mission</h2><span class="k">simulation, about 22 min</span></div>
@@ -176,9 +193,12 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
     <div class="track"><div class="zones"><i style="left:0.00%;width:43.33%"></i><i style="left:43.33%;width:10.00%"></i><i style="left:53.33%;width:25.00%"></i><i style="left:78.33%;width:3.33%"></i><i style="left:81.67%;width:11.67%"></i><i style="left:93.33%;width:6.67%"></i></div><div id="ugv"></div></div>
     <div class="links" id="links"></div>
     <div class="screens">
-      <div class="scr" id="sb"><div class="who b">Baseline</div><div class="whos">threshold failover</div><div class="st"></div><div class="blind">no usable view <b>0:00</b></div><canvas width="600" height="20"></canvas></div>
-      <div class="scr" id="so"><div class="who o">Our v1</div><div class="whos">predictive switching</div><div class="st"></div><div class="blind">no usable view <b>0:00</b></div><canvas width="600" height="20"></canvas></div>
+      <div class="scr" id="sb"><div class="who b">Baseline</div><div class="whos">threshold failover</div><div class="st"></div><div class="blind">no usable view <b>0:00</b></div></div>
+      <div class="scr" id="so"><div class="who o">Our v1</div><div class="whos">predictive switching</div><div class="st"></div><div class="blind">no usable view <b>0:00</b></div></div>
     </div>
+    <div class="tl"><div class="tll"><span>Distance</span><span style="color:#8DB58C">Mesh radio</span><span style="color:#A992CF">LEO satellite</span><span style="color:#E0A764">4G</span><span>Baseline</span><span style="color:#5B9BE6">Our v1</span></div>
+      <canvas id="tl" width="1000" height="132" aria-label="Whole mission timeline: drag to move through it"></canvas></div>
+    <div class="tlx"><span>0:00</span><span>tap or drag the timeline</span><span id="tend"></span></div>
     <div class="ctl">
       <button id="play" aria-label="Play">Play</button>
       <div class="seg" id="speed"><button data-v="15">15×</button><button data-v="30" class="on">30×</button><button data-v="60">60×</button></div>
@@ -186,14 +206,14 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
     </div>
     <div class="chap"><span>Jump to</span><button data-km="1.25">1.3 km Radio edge</button><button data-km="2.33">2.35 km Crater</button><button data-km="2.47">2.45 km Contested</button></div>
   </div>
-  <p class="cap">Seed {SEED}: the standard-mission run closest to the 20-seed average, not the best case. Same links and driver for both. Bands: blue usable, red not. <b>Usable</b> = the camera the manoeuvre needs arrives under 0.5 s old, fast and sharp enough to drive by. Our send-on-every-link controller has no second-by-second trace in this export, so the replay shows v1.</p>
+  <p class="cap">Seed {SEED}: the standard-mission run closest to the 20-seed average, not the best case. Same links and driver for both. Timeline: links coloured while up; controller lanes red where the operator had no usable view. <b>Usable</b> = the camera the manoeuvre needs arrives under 0.5 s old, fast and sharp enough to drive by. Our send-on-every-link controller has no second-by-second trace in this export, so the replay shows v1.</p>
   <a class="btn" href="viewer/">Open the full mission viewer <span aria-hidden="true">→</span></a>
 <p class="cap">Best on a laptop. Two consoles side by side, every link and camera, seven scenarios and the results behind them. It replays our v1 (predictive switching) against the baseline.</p>
 </section>
 
 <section class="grid2">
   <div class="panel">
-    <div class="step"><span class="n">1</span><h2>The challenge</h2><span class="k">EDGE Group</span></div>
+    <div class="step"><h2>The challenge</h2><span class="k">EDGE Group</span></div>
     <blockquote>"How might we keep a user's experience unbroken as they move between Wi-Fi, mobile, satellite and wired networks?"</blockquote>
   </div>
   <div class="panel">
@@ -203,7 +223,7 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
 </section>
 
 <section class="panel">
-  <div class="step"><span class="n">2</span><h2>The mission</h2><span class="k">simulation</span></div>
+  <div class="step"><span class="n">1</span><h2>The mission</h2><span class="k">simulation</span></div>
   <p class="lead">3 km out, 22 minutes, three links that each fail somewhere.</p>
   <p class="cap">Usable operator view per phase, outbound, standard mission, mean of 5 seeds.</p>
   <div class="phases"><div class="ph"><div class="phn">Leave base</div><div class="phs">All three links up</div>
@@ -222,39 +242,28 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
 </section>
 
 <section id="s3" class="panel">
-  <div class="step"><span class="n">3</span><h2>Proposed solution</h2></div>
+  <div class="step"><span class="n">2</span><h2>Proposed solution</h2></div>
   <p class="claim">Perfect switching still leaves 45 interruptions. <span>Sending on every link leaves 41, with no prediction at all.</span></p>
   <p>Today&#x27;s multi-link routers watch each link and switch when it fails. We first built a smarter switch with a failure predictor, then tested its ceiling with an oracle that knows the future: even perfect switching barely helps, because most outages leave nowhere better to switch to.</p><p>So we stopped betting on the switch. Our controller sends what matters on every alive link, and gives the bandwidth to the camera the manoeuvre needs.</p>
   <div class="sheet"><div class="cl"><div class="clt">Standard mission <small>links rarely overlap</small></div><div class="cr "><span>Baseline: threshold failover</span><div class="ct"><i style="width:37.1%;background:#8A8F98"></i><b>73</b></div></div><div class="cr "><span>Our v1: predictive switching</span><div class="ct"><i style="width:25.9%;background:#5C626B"></i><b>51</b></div></div><div class="cr dash"><span>Perfect switching (oracle)</span><div class="ct"><i style="width:23.1%;background:#fff"></i><b>45</b></div></div><div class="cr ours"><span>Ours: send on every link</span><div class="ct"><i style="width:21.1%;background:#1764C0"></i><b>41</b></div></div></div><div class="cl"><div class="clt">Overlapping coverage <small>harsh satellite handovers</small></div><div class="cr "><span>Baseline: threshold failover</span><div class="ct"><i style="width:88.0%;background:#8A8F98"></i><b>172</b></div></div><div class="cr "><span>Our v1: predictive switching</span><div class="ct"><i style="width:78.0%;background:#5C626B"></i><b>152</b></div></div><div class="cr dash"><span>Perfect switching (oracle)</span><div class="ct"><i style="width:67.5%;background:#fff"></i><b>132</b></div></div><div class="cr ours"><span>Ours: send on every link</span><div class="ct"><i style="width:65.4%;background:#1764C0"></i><b>128</b></div></div></div>
   <p class="cap">View interruptions per 22-minute mission, lower is better. Mean of 5 seeds, same simulated links for every controller. Oracle: reads the future, not deployable.</p></div>
 </section>
 
-<section id="s4" class="panel">
-  <div class="step"><span class="n">4</span><h2>The result</h2><span class="k">standard mission, simulation</span></div>
-  <div class="kpis">
-    <div class="kpi"><div class="big">85%</div><div class="what">usable operator view</div><div class="vs">baseline 76%</div></div>
-    <div class="kpi"><div class="big">−43%</div><div class="what">view interruptions</div><div class="vs">73 → 41 per mission</div></div>
-    <div class="kpi"><div class="big">−181 m</div><div class="what">driven without a usable view</div><div class="vs">767 m → 587 m</div></div>
-    <div class="kpi hl"><div class="big">9 → 96%</div><div class="what">crater: rear camera first</div><div class="vs">reversing out on 1 Mbps</div></div>
-  </div>
-  <p class="cap">Ours against threshold failover with fixed priorities, 5 seeds. Across three scenarios, usable view was higher in 15 of 15 paired runs and interruptions lower in 14 of 15; one harsh-handover seed was worse.</p>
-  <div class="caveat"><div class="t">A comparison, not a forecast</div>
-    <p>Every controller drove the same simulated links on the same seeds, so the gap between them is fair. The links themselves are our assumptions (only 4G was measured), the route is one route, and 5 seeds is a small sample. A real THeMIS would not see these exact percentages. We would rather tell you that than have you find it.</p></div>
-</section>
 
 <section id="s5" class="panel">
-  <div class="step"><span class="n">5</span><h2>Technical explanation</h2></div>
+  <div class="step"><span class="n">3</span><h2>Technical explanation</h2></div>
+  <div class="sheet diag"><svg viewBox="0 0 352 184" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Barlow, sans-serif"><style>.t{font-size:9.4px;font-weight:600}.s{font-size:8px;fill:#4F5B60;font-weight:500}.w{font-size:8.6px;font-weight:600;fill:#fff}.h{font-family:"Barlow Semi Condensed";font-size:9.4px;font-weight:600;fill:#18211F}</style><defs><marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#18211F"/></marker></defs><text x="0" y="9" class="h">Video: code it (two-stream FEC)</text><rect x="0" y="22" width="58" height="62" rx="3" fill="#0F1416"/><text x="29" y="44" text-anchor="middle" class="w">camera</text><text x="29" y="55" text-anchor="middle" class="w">frame</text><text x="29" y="72" text-anchor="middle" class="w" style="font-weight:500;font-size:7.4px">encoded twice</text><line x1="70" y1="32" x2="262" y2="32" stroke="#5B8C5A" stroke-width="1.6" stroke-dasharray="3 2"/><text x="262" y="29" text-anchor="end" class="s" style="fill:#5B8C5A;font-weight:600">Mesh radio</text><rect x="84" y="26" width="26" height="12" rx="2" fill="#fff" stroke="#18211F" stroke-width="1.2"/><text x="97" y="34.8" text-anchor="middle" class="s" style="fill:#18211F;font-weight:600">base</text><line x1="70" y1="56" x2="262" y2="56" stroke="#D08A3C" stroke-width="1.6" stroke-dasharray="3 2"/><text x="262" y="53" text-anchor="end" class="s" style="fill:#D08A3C;font-weight:600">4G</text><rect x="84" y="50" width="26" height="12" rx="2" fill="#fff" stroke="#18211F" stroke-width="1.2"/><text x="97" y="58.8" text-anchor="middle" class="s" style="fill:#18211F;font-weight:600">base</text><line x1="70" y1="80" x2="262" y2="80" stroke="#7A5EA8" stroke-width="1.6" stroke-dasharray="3 2"/><text x="262" y="77" text-anchor="end" class="s" style="fill:#7A5EA8;font-weight:600">LEO sat</text><rect x="84" y="74" width="26" height="12" rx="2" fill="#fff" stroke="#18211F" stroke-width="1.2"/><text x="97" y="82.8" text-anchor="middle" class="s" style="fill:#18211F;font-weight:600">base</text><rect x="120" y="26" width="40" height="12" rx="2" fill="#1764C0"/><text x="140" y="34.8" text-anchor="middle" class="w">½ A</text><rect x="120" y="50" width="40" height="12" rx="2" fill="#1764C0"/><text x="140" y="58.8" text-anchor="middle" class="w">½ B</text><rect x="120" y="74" width="40" height="12" rx="2" fill="#5B9BE6"/><text x="140" y="82.8" text-anchor="middle" class="w">parity</text><text x="84" y="98" class="s">whole on every link</text><text x="168" y="98" class="s">full stream, Reed-Solomon coded</text><rect x="272" y="22" width="80" height="62" rx="3" fill="#fff" stroke="#C5CDCE"/><text x="278" y="35" class="t">operator sees</text><text x="278" y="49" class="s"><tspan style="font-weight:700;fill:#1764C0">2 or 3 links</tspan> full</text><text x="278" y="62" class="s"><tspan style="font-weight:700;fill:#18211F">1 link</tspan> base view</text><text x="278" y="75" class="s"><tspan style="font-weight:700;fill:#B42318">0 links</tspan> hold, stop</text><path d="M58,53 L70,53" stroke="#18211F" stroke-width="1.4" marker-end="url(#ar)"/><text x="0" y="114" class="h">Commands: copy them</text><rect x="0" y="126" width="58" height="52" rx="3" fill="#0F1416"/><text x="29" y="147" text-anchor="middle" class="w">operator</text><text x="29" y="158" text-anchor="middle" class="w">command</text><text x="29" y="170" text-anchor="middle" class="w" style="font-weight:500;font-size:7.4px">a few bytes</text><line x1="70" y1="138" x2="262" y2="138" stroke="#5B8C5A" stroke-width="1.6" stroke-dasharray="3 2"/><text x="262" y="135" text-anchor="end" class="s" style="fill:#5B8C5A;font-weight:600">radio</text><rect x="114" y="132" width="52" height="12" rx="2" fill="#fff" stroke="#18211F" stroke-width="1.2"/><text x="140" y="140.8" text-anchor="middle" class="s" style="fill:#18211F;font-weight:600">cmd #1042</text><line x1="70" y1="162" x2="262" y2="162" stroke="#D08A3C" stroke-width="1.6" stroke-dasharray="3 2"/><text x="262" y="159" text-anchor="end" class="s" style="fill:#D08A3C;font-weight:600">4G</text><rect x="114" y="156" width="52" height="12" rx="2" fill="#fff" stroke="#18211F" stroke-width="1.2"/><text x="140" y="164.8" text-anchor="middle" class="s" style="fill:#18211F;font-weight:600">cmd #1042</text><path d="M58,152 L70,152" stroke="#18211F" stroke-width="1.4" marker-end="url(#ar)"/><rect x="272" y="126" width="80" height="52" rx="3" fill="#fff" stroke="#C5CDCE"/><text x="278" y="139" class="t">vehicle obeys</text><text x="278" y="152" class="s">the freshest copy</text><text x="278" y="163" class="s">one link left: 70 %</text><text x="278" y="174" class="s">none: hold, then stop</text></svg></div>
   <p>Every 0.1 s the controller reads only what a real vehicle can measure: delay, loss and capacity on each link.</p><p><b>Mission-aware allocation.</b> It infers the manoeuvre (drive, reverse, precision, stop) from operator commands. The camera that manoeuvre needs gets its minimum resolution and frame rate first; uploads go urgent-first when stopped, video-first when driving.</p><p><b>Two-stream FEC.</b> Each frame is encoded twice. The small base stream travels whole on every alive link; the full stream is Reed-Solomon coded so any one link can drop.</p><p><b>Command copies.</b> Every command goes out on both links; the vehicle obeys the freshest copy and derates to 70 % throttle when one link is left.</p>
 </section>
 
 <section class="panel">
-  <div class="step"><span class="n">6</span><h2>Solution features</h2></div>
+  <div class="step"><span class="n">4</span><h2>Solution features</h2></div>
   <ul class="items"><li><b>No switching gap.</b> A link can vanish mid-frame and the operator never notices.</li><li><b>Priced to the mission.</b> Base-layer copy costs about 9 % extra data; two-stream FEC about 26 %.</li><li><b>Emission-control ready.</b> Redundancy level is a policy setting. Under emission control, transmit a base-quality stream on one link only.</li><li><b>Fails safe.</b> Holds the last command for a speed-dependent budget, then stops.</li><li><b>Same code, simulation to vehicle.</b> The deciders tested in simulation are the modules that run on the vehicle.</li></ul>
   <p class="cap" style="margin-top:14px"><b>Built on existing mechanisms:</b> 3GPP ATSSS multi-access steering (our baseline); multiple description and erasure coding across paths (two-stream FEC); XLINK multi-path QUIC for video, SIGCOMM 2021.</p>
 </section>
 
 <section id="s7" class="panel">
-  <div class="step"><span class="n">7</span><h2>From model to metal</h2><span class="k">a working rover</span></div>
+  <div class="step"><span class="n">5</span><h2>From model to metal</h2><span class="k">a working rover</span></div>
   <div class="photos"><img src="img/car.jpg" alt="The RC toy car used as the rover" loading="lazy"><img src="img/esp32.jpg" alt="ESP32 wired to the toy's 27 MHz receiver" loading="lazy"><img src="img/bench.jpg" alt="Bench rig with an Arduino Uno" loading="lazy"></div>
   <div class="kpi hl wide"><div class="big">−64%</div><div class="what">time out of control (simulation)</div><div class="vs">0.92 s → 0.33 s per run against threshold failover. 30 seeds of the arbiter's Python twin, line for line the ESP32 logic. Radio range assumed; 4G delay measured.</div></div>
   <div class="cmp">
@@ -275,7 +284,7 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
 </section>
 
 <section id="s8" class="panel dark">
-  <div class="step"><span class="n">8</span><h2>Future improvements</h2></div>
+  <div class="step"><span class="n">6</span><h2>Future improvements</h2></div>
   <p class="cap">We start from what our results don't show yet. Each limit is the next experiment.</p>
   <ul class="limits"><li><b>Tuned on one route.</b><span>Next: run an unseen route with no retuning.</span></li><li><b>Link models are assumptions; only 4G was measured and corrected.</b><span>Next: a field range walk for radio and satellite, including outages that hit two links at once.</span></li><li><b>Jamming defeats redundancy: with no good link, usable view stays at 24 %.</b><span>Next: pair with anti-jam radios or communication-aware route planning.</span></li><li><b>The rover carries commands only; video FEC runs in simulation.</b><span>Next: second encode and Reed-Solomon parity on the rover&#x27;s computer.</span></li></ul>
 </section>
@@ -296,19 +305,35 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
   var F = R.frames, N = F.length, step = R.step_s;
   var cap = document.querySelector('#replay > .cap'); cap.innerHTML = cap.innerHTML.replace('{SEED}', R.seed);
   var far = [], m = 0; F.forEach(function (f) { m = Math.max(m, f[1]); far.push(m); });
+  function mmss(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
   var cumB = [0], cumO = [0];
   for (var i = 0; i < N; i++) { cumB.push(cumB[i] + (F[i][3] ? 0 : step)); cumO.push(cumO[i] + (F[i][4] ? 0 : step)); }
   var cols = ['#5B8C5A', '#7A5EA8', '#D08A3C'];
   var links = document.getElementById('links');
   var chips = R.links.map(function (n) { var s = document.createElement('span'); s.textContent = n; links.appendChild(s); return s; });
-  function band(id, col) {
-    var cv = document.querySelector(id + ' canvas'), x = cv.getContext('2d'), w = cv.width;
-    for (var i = 0; i < N; i++) { x.fillStyle = F[i][col] ? '#1764C0' : '#D8432F'; x.fillRect(Math.floor(i * w / N), 0, Math.ceil(w / N) + 1, cv.height); }
-    return { cv: cv, x: x, img: x.getImageData(0, 0, w, cv.height) };
+  // the whole mission at once, as in the viewer's bottom panel: distance, link truth, both ribbons
+  var cv = document.getElementById('tl'), X = cv.getContext('2d'), W = cv.width, H = cv.height;
+  var rows = [[0, 30], [36, 14], [54, 14], [72, 14], [92, 18], [114, 18]];
+  function cx(i) { return i * W / N; }
+  X.fillStyle = '#101619'; X.fillRect(0, 0, W, H);
+  X.strokeStyle = '#E9EEF0'; X.lineWidth = 1.6; X.beginPath();
+  for (var i = 0; i < N; i += 2) { var y = rows[0][0] + rows[0][1] - F[i][1] / 3 * (rows[0][1] - 4) - 2; if (i) X.lineTo(cx(i), y); else X.moveTo(0, y); }
+  X.stroke();
+  var lc = ['#5B8C5A', '#7A5EA8', '#D08A3C'];
+  for (var i = 0; i < N; i++) {
+    var x0 = Math.floor(cx(i)), w = Math.ceil(W / N) + 1;
+    for (var k = 0; k < 3; k++) { X.fillStyle = F[i][5 + k] ? lc[k] : '#1F292E'; X.fillRect(x0, rows[1 + k][0], w, rows[1 + k][1]); }
+    X.fillStyle = F[i][3] ? '#8A8F98' : '#D8432F'; X.fillRect(x0, rows[4][0], w, rows[4][1]);
+    X.fillStyle = F[i][4] ? '#1764C0' : '#D8432F'; X.fillRect(x0, rows[5][0], w, rows[5][1]);
   }
-  var bB = band('#sb', 3), bO = band('#so', 4);
-  function head(b, i) { b.x.putImageData(b.img, 0, 0); b.x.fillStyle = '#fff'; b.x.fillRect(Math.floor(i * b.cv.width / N) - 1, 0, 3, b.cv.height); }
-  function mmss(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
+  var base = X.getImageData(0, 0, W, H);
+  document.getElementById('tend').textContent = mmss(F[N - 1][0]);
+  function cursor(i) { X.putImageData(base, 0, 0); X.fillStyle = '#fff'; X.fillRect(Math.round(cx(i)) - 1, 0, 2.5, H); }
+  function seek(ev) { var r = cv.getBoundingClientRect(); show(Math.round((ev.clientX - r.left) / r.width * (N - 1))); }
+  var dragging = false;
+  cv.addEventListener('pointerdown', function (ev) { dragging = true; setPlay(false); cv.setPointerCapture(ev.pointerId); seek(ev); });
+  cv.addEventListener('pointermove', function (ev) { if (dragging) seek(ev); });
+  cv.addEventListener('pointerup', function () { dragging = false; });
   var scrub = document.getElementById('scrub'); scrub.max = N - 1;
   var idx = 0, playing = false, last = 0, acc = 0, speed = 30;
   function show(i) {
@@ -320,13 +345,13 @@ blockquote { font-family: var(--disp); font-size: 20px; font-weight: 500; line-h
     document.getElementById('phase').textContent = ph[0] + (f[1] < far[idx] - 0.05 ? ', on the way back' : '');
     document.getElementById('ugv').style.left = (f[1] / 3 * 100) + '%';
     chips.forEach(function (c, k) { var up = f[5 + k]; c.className = up ? 'up' : ''; c.style.background = up ? cols[k] : 'transparent'; });
-    [['#sb', 3, cumB, bB], ['#so', 4, cumO, bO]].forEach(function (a) {
+    [['#sb', 3, cumB], ['#so', 4, cumO]].forEach(function (a) {
       var st = document.querySelector(a[0] + ' .st'), ok = f[a[1]];
       st.textContent = ok ? 'Usable' : 'Not usable'; st.className = 'st ' + (ok ? 'ok' : 'bad');
       document.querySelector(a[0] + ' .blind b').textContent = mmss(a[2][idx + 1]);
-      head(a[3], idx);
     });
     scrub.value = idx;
+    cursor(idx);
   }
   function tick(ts) {
     if (!playing) return;
